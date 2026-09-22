@@ -21,7 +21,8 @@ def init_db():
                 FIRST_NAME  VARCHAR(50),
                 SECOND_NAME VARCHAR(50),
                 EMAIL       TEXT UNIQUE NOT NULL
-                            CHECK (EMAIL LIKE '%@%.%' AND LENGTH(EMAIL) >= 5)
+                            CHECK (EMAIL LIKE '%@%.%' AND LENGTH(EMAIL) >= 5),
+                PASSWORD    TEXT
             )
         ''')
 
@@ -30,9 +31,8 @@ def init_db():
                 TASK_ID      INTEGER PRIMARY KEY,
                 USER_ID      INTEGER NOT NULL,
                 TASK_NAME    TEXT NOT NULL,
-                TASK_STATUS  TEXT DEFAULT 'NOT STATED',
+                TASK_STATUS  INT DEFAULT 0,
                 PRIORITY     INTEGER CHECK (PRIORITY > 0 AND PRIORITY <= 5),
-                DIFFICULTY   TEXT CHECK (DIFFICULTY IN ('LOW', 'MEDIUM', 'HIGH')),
                 CREATED_DATE TEXT DEFAULT CURRENT_TIMESTAMP,
                 DEADLINE     TEXT,
                 FOREIGN KEY (USER_ID) REFERENCES USERS(USER_ID)
