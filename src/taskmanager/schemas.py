@@ -10,10 +10,9 @@ def get_connection():
     return connection
 
 
-def init_db(connection):
-    
+def init_db():
+    connection = get_connection()
     try:
-
         cursor = connection.cursor()
 
         cursor.execute('''
@@ -30,7 +29,7 @@ def init_db(connection):
             CREATE TABLE IF NOT EXISTS TASKS (
                 TASK_ID      INTEGER PRIMARY KEY,
                 USER_ID      INTEGER NOT NULL,
-                TASK_NAME    TEXT UNIQUE NOT NULL,
+                TASK_NAME    TEXT NOT NULL,
                 TASK_STATUS  TEXT DEFAULT 'NOT STATED',
                 PRIORITY     INTEGER CHECK (PRIORITY > 0 AND PRIORITY <= 5),
                 DIFFICULTY   TEXT CHECK (DIFFICULTY IN ('LOW', 'MEDIUM', 'HIGH')),
@@ -42,11 +41,10 @@ def init_db(connection):
 
         connection.commit()
 
-        
-
     except sqlite3.Error as e:
         connection.rollback()
         print(f"Database error: {e}")
         raise  # stop the app if the DB can't be set up
 
-    
+    finally:
+        connection.close()
